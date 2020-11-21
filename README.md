@@ -18,7 +18,7 @@ Stages of data processing:
 1. At time t, the python script will ingest data that is produced at time t-1 from the relational database. Example: if it is a daily ingestion, then on 02-Jan-2010, the python script will ingest data updated at 01-Jan-2010.
 - To access a relational database like PostgreSQL with python, we can use a package like `Psycopg2`
 
-2. Append the newly ingested data to a raw table in the data lake (example, Amazon s3, HDFS, Google Cloud storage). 
+2. Append the newly ingested data to a raw table in the data lake (example: Amazon s3, HDFS, Google Cloud storage). 
 
 3. Deduplicate the records by primary key, i.e. if two records have the same primary key, take the record with the latest updated date.
 
@@ -139,5 +139,5 @@ Social media (dimension table)
 - active_since (date)
 
 ## Data Transformation
-Please refer to `src/html_generator.py`. The output data is in `output_assessment.csv`. 
+Please refer to `src/html_generator.py`. The output data is in `data/output_assessment.csv`. 
 
