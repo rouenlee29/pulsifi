@@ -139,5 +139,5 @@ Social media (dimension table)
 - active_since (date)
 
 ## Data Transformation
-Please refer to `src/html_generator.py`
+Please refer to `src/html_generator.py`. The output data is in `output_assessment.csv`. 
 
