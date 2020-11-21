@@ -1,11 +1,11 @@
 ## Extract-Transform-Load Framework
 Weaknesses:
 
-1. Some tables do not have updated_at column
-- This will be a problem when we want to upsert new rows in our datalake. Consider the case when a record  created in 01-Jan-2010 10am, and updated at 01-Jan-2010 11am. If we will be ingesting records on 01-Jan-2010, we will not be able to identify which is the most updated version of the record. The solution is to add an additional column containing updated timestamp. 
+1. Some tables do not have `updated_at` column
+- This will be a problem when we want to upsert new rows in our data lake. Consider the case when a record  created in 01-Jan-2010 10am, and updated at 01-Jan-2010 11am. If we will be ingesting records on 01-Jan-2010, we will not be able to identify which is the most updated version of the record. The solution is to add an additional column containing updated timestamp. 
 
 2. Multiple schema in one database
-- If a schema has problems, then other schemas might be affected
+- If a schema has problems, then other schemas might be affected.
 - We will be reading everything from the same database. Too many reading processes running concurrently might overwhelm the database.
 - Split to multiple databases if necessary.
 
@@ -16,12 +16,13 @@ Weaknesses:
 
 Stages of data processing:
 1. At time t, the python script will ingest data that is produced at time t-1 from the relational database. Example: if it is a daily ingestion, then on 02-Jan-2010, the python script will ingest data updated at 01-Jan-2010.
+- To access a relational database like PostgreSQL with python, we can use a package like `Psycopg2`
 
-2. Append the newly ingested data to a raw table in the data lake. 
+2. Append the newly ingested data to a raw table in the data lake (example, Amazon s3, HDFS, Google Cloud storage). 
 
-3. Deduplicate the records by primary key, i.e. if two records have the same primary key, take the record with the latest updated date
+3. Deduplicate the records by primary key, i.e. if two records have the same primary key, take the record with the latest updated date.
 
-4. Remove deleted records
+4. Remove deleted records.
 
 The entire process above is coordinated by a scheduler (example Airflow). 
 
@@ -98,7 +99,7 @@ FROM (SELECT * FROM temp WHERE row_num = 1) first
 FULL OUTER JOIN (SELECT * FROM temp WHERE row_num = 2) second
 ON first.name = second.name
 ```
-## Programming 
+## Basic Programming 
 
 Please refer to `src/programming.py`, and `src/tests.py` for the unit tests.
 
@@ -113,7 +114,7 @@ Person job (fact table)
 - ended_at (date)
 - current_job (boolean)
 
-Index key for the fact table depends on the query pattern. For example, if the fact table is used mostly by headhunters / recruiters, it might be helpful to index the table by year of `started_at` and `current_job`, to identify those who have spent a long time in their current job. 
+Index key for the fact table depends on the query pattern. For example, if the fact table is used mostly by headhunters / recruiters, it might be helpful to index the table by year of `started_at` and `current_job`, to identify those who have spent a long time at their current job and more likely to be ready for a new job. 
 
 Person (dimension table) 
 - profile_id (string, primary key, links to profile_id in fact table)
@@ -136,4 +137,7 @@ Social media (dimension table)
 - media (string, primary key and index key)
 - account_name (string, primary key)
 - active_since (date)
+
+## Data Transformation
+Please refer to `src/html_generator.py`
 
