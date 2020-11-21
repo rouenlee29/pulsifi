@@ -98,3 +98,42 @@ FROM (SELECT * FROM temp WHERE row_num = 1) first
 FULL OUTER JOIN (SELECT * FROM temp WHERE row_num = 2) second
 ON first.name = second.name
 ```
+## Programming 
+
+Please refer to `src/programming.py`, and `src/tests.py` for the unit tests.
+
+## Data Modeling 
+Below are the table and their columns:
+
+Person job (fact table)
+- profile_id (string, primary key)
+- job_id (string, primary key)
+- organization_id (string, primary key)
+- started_at (date)
+- ended_at (date)
+- current_job (boolean)
+
+Index key for the fact table depends on the query pattern. For example, if the fact table is used mostly by headhunters / recruiters, it might be helpful to index the table by year of `started_at` and `current_job`, to identify those who have spent a long time in their current job. 
+
+Person (dimension table) 
+- profile_id (string, primary key, links to profile_id in fact table)
+- first_name (string)
+- last_name (string)
+- first letter of last name (string, index key)
+- mobile (string)
+- email (string)
+
+Job (dimension table)
+- job_id (string, primary key, links to job_id in fact table)
+- job_title (string)
+
+Organization (dimension table)
+- organization_id (string, primary key, links to organization_id in fact table)
+- organization_name (string)
+
+Social media (dimension table)
+- profile_id (string, primary key, links to profile_id in fact table)
+- media (string, primary key and index key)
+- account_name (string, primary key)
+- active_since (date)
+
