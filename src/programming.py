@@ -3,8 +3,7 @@ import sys
 def identify_unique_pairs(input_list):
     unique_pairs = []
     input_list_copy = input_list.copy()
-    for i in input_list_copy:
-        input_list_copy = input_list.copy()
+    for i in input_list:
         input_list_copy.remove(i)
 
         for c in input_list_copy:
